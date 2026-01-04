@@ -1,5 +1,6 @@
 package ru.testovich.controllers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,6 +37,14 @@ public class TestControllerIT {
             post("/api/v1/tests")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(newTest))
+        )
+        .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testGetTestsCurrentUser_forbidden() throws Exception {
+        mockMvc.perform(
+            get("/api/v1/tests/my")
         )
         .andExpect(status().isForbidden());
     }

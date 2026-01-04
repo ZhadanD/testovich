@@ -1,5 +1,7 @@
 package ru.testovich.mappers;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,4 +16,6 @@ public interface TestMapper {
     TestEntity toEntity(CreateTestDTO dto);
 
     GetTestDTO toGetTestDTO(TestEntity entity);
+
+    List<GetTestDTO> toListGetTestDTO(List<TestEntity> entities);
 }

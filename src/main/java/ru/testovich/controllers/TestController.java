@@ -1,5 +1,7 @@
 package ru.testovich.controllers;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,5 +25,12 @@ public class TestController implements TestAPI {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                             .body(response);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<GetTestDTO>>> getTestsCurrentUser() {
+        ResponseDTO<List<GetTestDTO>> response = this.testService.getTestsCurrentUser();
+
+        return ResponseEntity.ok(response);
     }
 }

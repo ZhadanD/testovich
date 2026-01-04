@@ -1,5 +1,7 @@
 package ru.testovich.services;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,6 +46,28 @@ public class TestService implements ITestService {
         var response = new ResponseDTO<GetTestDTO>();
 
         response.setData(testDTO);
+
+        return response;
+    }
+
+    @Override
+    public ResponseDTO<List<GetTestDTO>> getTestsCurrentUser() throws ResponseStatusException {
+        UserEntity currentUser = this.userService.getCurrentUser();
+
+        var response = new ResponseDTO<List<GetTestDTO>>();
+
+        try {
+            List<TestEntity> testEntities = this.testRepository.findTestEntityByUser(currentUser);
+
+            List<GetTestDTO> listTests = this.testMapper.toListGetTestDTO(testEntities);
+
+            response.setData(listTests);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Произошла ошибка при работе с базой данных"
+            );
+        }
 
         return response;
     }

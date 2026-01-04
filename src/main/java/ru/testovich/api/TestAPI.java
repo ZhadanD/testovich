@@ -1,6 +1,9 @@
 package ru.testovich.api;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,4 +21,8 @@ public interface TestAPI {
     @Operation(summary = "Создание теста")
     @PostMapping
     ResponseEntity<ResponseDTO<GetTestDTO>> createTest(@Valid @RequestBody CreateTestDTO dto);
+
+    @Operation(summary = "Получение тестов авторизованного пользователя")
+    @GetMapping("/my")
+    ResponseEntity<ResponseDTO<List<GetTestDTO>>> getTestsCurrentUser();
 }
