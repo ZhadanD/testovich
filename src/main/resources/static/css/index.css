@@ -1,0 +1,22 @@
+.list-tests {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    border: 2px solid var(--success-color);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.tests-section {
+    margin-top: 3rem;
+}
+
+.tests-section-title {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.no-tests-text {
+    font-size: 1.2rem;
+}

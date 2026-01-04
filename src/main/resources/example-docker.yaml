@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: testovich
+  datasource:
+    url: jdbc:postgresql://host.docker.internal/название базы
+    username: имя юзера базы
+    password: пароль
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+jwt:
+  secret: че-то длинное
+server:
+  port: 8090
