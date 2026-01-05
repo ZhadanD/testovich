@@ -83,7 +83,7 @@ function showTest(test) {
             </div>
 
             <div class="test-card-footer">
-                <button class="test-card-button">Открыть</button>
+                <a href="/myTests/test/${test.id}" class="test-card-button">Открыть</a>
             </div>
         </div>
     `

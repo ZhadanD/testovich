@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Тест</title>
+
+        <link rel="stylesheet" href="/css/colors.css" />
+        <link rel="stylesheet" href="/css/commonStyles.css" />
+    </head>
+    <body>
+        <input id="testId" type="hidden" th:value="${testId}" />
+
+        <div class="container">
+            <div th:insert="~{blocks/header}"></div>
+
+            <main>
+                <button
+                    type="button"
+                    class="btn btn-success mb-10"
+                    id="createQuestionBtn"
+                    onclick="toggleAccordion('createQuestionAccordion')"
+                >
+                    Создать вопрос
+                </button>
+
+                <br />
+
+                <div class="accordion" id="createQuestionAccordion">
+                    <div class="accordion-content">
+                        <form class="beautiful-form">
+                            <h2>Создание вопроса</h2>
+
+                            <label class="beautiful-label" for="question-name"
+                                >Название вопроса</label
+                            >
+                            <input
+                                type="text"
+                                class="beautiful-input"
+                                id="question-name"
+                                placeholder="Введите название вопроса"
+                            />
+                            <p id="error-name" class="error-text"></p>
+
+                            <br />
+
+                            <button
+                                type="button"
+                                class="btn btn-success mb-10"
+                                id="addAnswerBtn"
+                                onclick="toggleAccordion('addAnswerAccordion')"
+                            >
+                                Добавить ответ
+                            </button>
+
+                            <div class="accordion" id="addAnswerAccordion">
+                                <div class="accordion-content">
+                                    <div class="beautiful-form">
+                                        <h2>Добавление ответа</h2>
+
+                                        <label
+                                            class="beautiful-label"
+                                            for="answer-name"
+                                            >Название ответа</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="beautiful-input"
+                                            id="answer-name"
+                                            placeholder="Введите название ответа"
+                                        />
+                                        <p
+                                            id="error-answer-name"
+                                            class="error-text"
+                                        ></p>
+
+                                        <br />
+
+                                        <div class="checkbox-wrapper">
+                                            <input
+                                                type="checkbox"
+                                                id="answer-isTrue"
+                                                class="checkbox-input"
+                                            />
+                                            <label
+                                                for="answer-isTrue"
+                                                class="checkbox-label"
+                                            >
+                                                <span
+                                                    class="custom-checkbox"
+                                                ></span>
+                                                Правильный?
+                                            </label>
+                                        </div>
+
+                                        <br />
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-success"
+                                            onclick="addAnswer()"
+                                        >
+                                            Добавить ответ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h2>Ответы</h2>
+
+                            <div id="new-answers"></div>
+
+                            <br />
+
+                            <button
+                                type="button"
+                                class="btn btn-success"
+                                onclick="createQuestion()"
+                            >
+                                Создать вопрос
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script src="/js/header.js"></script>
+        <script src="/js/commonScripts.js"></script>
+        <script src="/js/errors.js"></script>
+        <script src="/js/myTest.js"></script>
+    </body>
+</html>
