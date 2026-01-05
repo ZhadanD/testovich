@@ -1,0 +1,28 @@
+package ru.testovich.controllers;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import ru.testovich.api.QuestionAPI;
+import ru.testovich.dto.CreateQuestionDTO;
+import ru.testovich.dto.GetQuestionDTO;
+import ru.testovich.dto.ResponseDTO;
+import ru.testovich.services.IQuestionService;
+
+@RestController
+@AllArgsConstructor
+public class QuestionController implements QuestionAPI {
+    private IQuestionService questionService;
+
+    @Override
+    public ResponseEntity<ResponseDTO<GetQuestionDTO>> createQuestion(@Valid CreateQuestionDTO dto) {
+        ResponseDTO<GetQuestionDTO> response = this.questionService.createQuestion(dto);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(response);
+    }
+    
+}

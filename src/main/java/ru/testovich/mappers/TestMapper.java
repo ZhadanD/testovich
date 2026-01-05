@@ -13,6 +13,7 @@ import ru.testovich.entities.TestEntity;
 public interface TestMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "questions", ignore = true)
     TestEntity toEntity(CreateTestDTO dto);
 
     GetTestDTO toGetTestDTO(TestEntity entity);
