@@ -10,9 +10,7 @@
   </head>
   <body>
     <div class="container">
-      <header class="header">
-        <h1 class="header-title">Testovich</h1>
-      </header>
+      <div th:insert="~{blocks/header}"></div>
 
       <main>
         <section class="tests-section">
@@ -25,6 +23,7 @@
       </main>
     </div>
 
+    <script src="/js/header.js"></script>
     <script src="/js/tests.js"></script>
   </body>
 </html>

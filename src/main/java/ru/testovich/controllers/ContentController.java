@@ -12,6 +12,11 @@ public class ContentController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("/myTests")
+    public String myTests() {
+        return "myTests";
+    }
     
     @GetMapping("/auth/register")
     public String register() {

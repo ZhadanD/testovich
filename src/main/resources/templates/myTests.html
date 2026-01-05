@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Мои тесты</title>
+
+        <link rel="stylesheet" href="/css/colors.css" />
+        <link rel="stylesheet" href="/css/commonStyles.css" />
+        <link rel="stylesheet" href="/css/myTests.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div th:insert="~{blocks/header}"></div>
+
+            <main>
+                <section class="tests-section">
+                    <button
+                        type="button"
+                        class="btn btn-success mb-10"
+                        id="createTestBtn"
+                        onclick="toggleAccordion('createTestAccordion')"
+                    >
+                        Создать тест
+                    </button>
+
+                    <br />
+
+                    <div class="accordion" id="createTestAccordion">
+                        <div class="accordion-content">
+                            <form class="beautiful-form">
+                                <h2>Создание теста</h2>
+
+                                <label class="beautiful-label" for="test-name"
+                                    >Название теста</label
+                                >
+                                <input
+                                    type="text"
+                                    class="beautiful-input"
+                                    id="test-name"
+                                    placeholder="Введите название теста"
+                                />
+                                <p id="error-name" class="error-text"></p>
+
+                                <br />
+
+                                <label
+                                    class="beautiful-label"
+                                    for="select-test-type"
+                                    >Тип теста</label
+                                >
+                                <select
+                                    id="select-test-type"
+                                    class="beautiful-select"
+                                >
+                                    <option value="FINAL_CHECK" selected>
+                                        Итоговая проверка
+                                    </option>
+                                    <option value="INSTANT_VERIFICATION">
+                                        Мгновенная проверка
+                                    </option>
+                                </select>
+                                <p id="error-type" class="error-text"></p>
+
+                                <br />
+
+                                <label
+                                    class="beautiful-label"
+                                    for="select-test-isPublic"
+                                    >Видимость теста</label
+                                >
+                                <select
+                                    id="select-test-isPublic"
+                                    class="beautiful-select"
+                                >
+                                    <option value="false" selected>Приватный</option>
+                                    <option value="true">Публичный</option>
+                                </select>
+                                <p id="error-isPublic" class="error-text"></p>
+
+                                <br />
+
+                                <button
+                                    type="button"
+                                    class="btn btn-success"
+                                    onclick="createTest()"
+                                >
+                                    Создать тест
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <h2 class="tests-section-title">Мои тесты</h2>
+
+                    <p id="noTestsMessage" class="no-tests-text"></p>
+
+                    <div class="list-tests" id="list-tests"></div>
+                </section>
+            </main>
+        </div>
+
+        <script src="/js/header.js"></script>
+        <script src="/js/commonScripts.js"></script>
+        <script src="/js/errors.js"></script>
+        <script src="/js/myTests.js"></script>
+    </body>
+</html>
