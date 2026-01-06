@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import ru.testovich.api.TestAPI;
 import ru.testovich.dto.CreateTestDTO;
+import ru.testovich.dto.GetFullTestDTO;
 import ru.testovich.dto.GetTestDTO;
 import ru.testovich.dto.ResponseDTO;
 import ru.testovich.services.ITestService;
@@ -30,6 +31,13 @@ public class TestController implements TestAPI {
     @Override
     public ResponseEntity<ResponseDTO<List<GetTestDTO>>> getTestsCurrentUser() {
         ResponseDTO<List<GetTestDTO>> response = this.testService.getTestsCurrentUser();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<GetFullTestDTO>> getTestCurrentUser(Long testId) {
+        ResponseDTO<GetFullTestDTO> response = this.testService.getTestCurrentUser(testId);
 
         return ResponseEntity.ok(response);
     }

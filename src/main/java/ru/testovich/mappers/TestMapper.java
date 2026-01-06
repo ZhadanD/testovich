@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import ru.testovich.dto.CreateTestDTO;
+import ru.testovich.dto.GetFullTestDTO;
 import ru.testovich.dto.GetTestDTO;
 import ru.testovich.entities.TestEntity;
 
@@ -19,4 +20,6 @@ public interface TestMapper {
     GetTestDTO toGetTestDTO(TestEntity entity);
 
     List<GetTestDTO> toListGetTestDTO(List<TestEntity> entities);
+
+    GetFullTestDTO toGetFullTestDTO(TestEntity testEntity);
 }

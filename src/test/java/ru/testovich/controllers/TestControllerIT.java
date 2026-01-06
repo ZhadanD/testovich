@@ -48,4 +48,12 @@ public class TestControllerIT {
         )
         .andExpect(status().isForbidden());
     }
+
+    @Test
+    void testGetTestCurrentUser_forbidden() throws Exception {
+        mockMvc.perform(
+            get("/api/v1/tests/my/1")
+        )
+        .andExpect(status().isForbidden());
+    }
 }

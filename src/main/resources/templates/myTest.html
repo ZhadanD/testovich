@@ -15,112 +15,164 @@
             <div th:insert="~{blocks/header}"></div>
 
             <main>
-                <button
-                    type="button"
-                    class="btn btn-success mb-10"
-                    id="createQuestionBtn"
-                    onclick="toggleAccordion('createQuestionAccordion')"
+                <div
+                    class="container border border-success mb-10 content-center"
                 >
-                    Создать вопрос
-                </button>
+                    <h2>Настройки теста</h2>
 
-                <br />
+                    <label class="beautiful-label" for="test-name"
+                        >Название теста</label
+                    >
+                    <input
+                        type="text"
+                        class="beautiful-input"
+                        id="test-name"
+                        placeholder="Введите название теста"
+                    />
+                    <p id="error-name" class="error-text"></p>
 
-                <div class="accordion" id="createQuestionAccordion">
-                    <div class="accordion-content">
-                        <form class="beautiful-form">
-                            <h2>Создание вопроса</h2>
+                    <br />
 
-                            <label class="beautiful-label" for="question-name"
-                                >Название вопроса</label
-                            >
-                            <input
-                                type="text"
-                                class="beautiful-input"
-                                id="question-name"
-                                placeholder="Введите название вопроса"
-                            />
-                            <p id="error-name" class="error-text"></p>
+                    <label class="beautiful-label" for="select-test-type"
+                        >Тип теста</label
+                    >
+                    <select id="select-test-type" class="beautiful-select">
+                        <option value="FINAL_CHECK">Итоговая проверка</option>
+                        <option value="INSTANT_VERIFICATION">
+                            Мгновенная проверка
+                        </option>
+                    </select>
+                    <p id="error-type" class="error-text"></p>
 
-                            <br />
+                    <br />
 
-                            <button
-                                type="button"
-                                class="btn btn-success mb-10"
-                                id="addAnswerBtn"
-                                onclick="toggleAccordion('addAnswerAccordion')"
-                            >
-                                Добавить ответ
-                            </button>
+                    <label class="beautiful-label" for="select-test-isPublic"
+                        >Видимость теста</label
+                    >
+                    <select id="select-test-isPublic" class="beautiful-select">
+                        <option value="false">Приватный</option>
+                        <option value="true">Публичный</option>
+                    </select>
+                    <p id="error-isPublic" class="error-text"></p>
+                </div>
 
-                            <div class="accordion" id="addAnswerAccordion">
-                                <div class="accordion-content">
-                                    <div class="beautiful-form">
-                                        <h2>Добавление ответа</h2>
+                <div class="container border border-success">
+                    <h2>Вопросы</h2>
 
-                                        <label
-                                            class="beautiful-label"
-                                            for="answer-name"
-                                            >Название ответа</label
-                                        >
-                                        <input
-                                            type="text"
-                                            class="beautiful-input"
-                                            id="answer-name"
-                                            placeholder="Введите название ответа"
-                                        />
-                                        <p
-                                            id="error-answer-name"
-                                            class="error-text"
-                                        ></p>
+                    <button
+                        type="button"
+                        class="btn btn-success mb-10"
+                        id="createQuestionBtn"
+                        onclick="toggleAccordion('createQuestionAccordion')"
+                    >
+                        Создать вопрос
+                    </button>
 
-                                        <br />
+                    <br />
 
-                                        <div class="checkbox-wrapper">
-                                            <input
-                                                type="checkbox"
-                                                id="answer-isTrue"
-                                                class="checkbox-input"
-                                            />
+                    <div class="accordion" id="createQuestionAccordion">
+                        <div class="accordion-content">
+                            <form class="beautiful-form">
+                                <h2>Создание вопроса</h2>
+
+                                <label
+                                    class="beautiful-label"
+                                    for="question-name"
+                                    >Название вопроса</label
+                                >
+                                <input
+                                    type="text"
+                                    class="beautiful-input"
+                                    id="question-name"
+                                    placeholder="Введите название вопроса"
+                                />
+                                <p id="error-name" class="error-text"></p>
+
+                                <br />
+
+                                <button
+                                    type="button"
+                                    class="btn btn-success mb-10"
+                                    id="addAnswerBtn"
+                                    onclick="toggleAccordion('addAnswerAccordion')"
+                                >
+                                    Добавить ответ
+                                </button>
+
+                                <div class="accordion" id="addAnswerAccordion">
+                                    <div class="accordion-content">
+                                        <div class="beautiful-form">
+                                            <h2>Добавление ответа</h2>
+
                                             <label
-                                                for="answer-isTrue"
-                                                class="checkbox-label"
+                                                class="beautiful-label"
+                                                for="answer-name"
+                                                >Название ответа</label
                                             >
-                                                <span
-                                                    class="custom-checkbox"
-                                                ></span>
-                                                Правильный?
-                                            </label>
+                                            <input
+                                                type="text"
+                                                class="beautiful-input"
+                                                id="answer-name"
+                                                placeholder="Введите название ответа"
+                                            />
+                                            <p
+                                                id="error-answer-name"
+                                                class="error-text"
+                                            ></p>
+
+                                            <br />
+
+                                            <div class="checkbox-wrapper">
+                                                <input
+                                                    type="checkbox"
+                                                    id="answer-isTrue"
+                                                    class="checkbox-input"
+                                                />
+                                                <label
+                                                    for="answer-isTrue"
+                                                    class="checkbox-label"
+                                                >
+                                                    <span
+                                                        class="custom-checkbox"
+                                                    ></span>
+                                                    Правильный?
+                                                </label>
+                                            </div>
+
+                                            <br />
+
+                                            <button
+                                                type="button"
+                                                class="btn btn-success"
+                                                onclick="addAnswer()"
+                                            >
+                                                Добавить ответ
+                                            </button>
                                         </div>
-
-                                        <br />
-
-                                        <button
-                                            type="button"
-                                            class="btn btn-success"
-                                            onclick="addAnswer()"
-                                        >
-                                            Добавить ответ
-                                        </button>
                                     </div>
                                 </div>
-                            </div>
 
-                            <h2>Ответы</h2>
+                                <h2>Ответы</h2>
 
-                            <div id="new-answers"></div>
+                                <div id="new-answers"></div>
 
-                            <br />
+                                <br />
 
-                            <button
-                                type="button"
-                                class="btn btn-success"
-                                onclick="createQuestion()"
-                            >
-                                Создать вопрос
-                            </button>
-                        </form>
+                                <button
+                                    type="button"
+                                    class="btn btn-success"
+                                    onclick="createQuestion()"
+                                >
+                                    Создать вопрос
+                                </button>
+                            </form>
+                        </div>
                     </div>
+
+                    <div
+                        id="questions"
+                        class="container border border-success"
+                    ></div>
                 </div>
             </main>
         </div>

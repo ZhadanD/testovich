@@ -66,6 +66,19 @@ body {
     gap: 20px;
 }
 
+.accordion-btn {
+    width: 100%;
+    border: 2px solid var(--success-color);
+    border-radius: 12px;
+    padding: 15px;
+    background: #393939;
+    margin-bottom: 15px;
+}
+
+.accordion-btn:hover {
+    cursor: pointer;
+}
+
 .accordion {
     max-height: 0;
     overflow: hidden;
@@ -221,6 +234,13 @@ body {
 
 .mb-10 {
     margin-bottom: 10px;
+}
+
+.content-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .checkbox-wrapper {
