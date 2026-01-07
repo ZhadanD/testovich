@@ -10,6 +10,7 @@ import ru.testovich.api.QuestionAPI;
 import ru.testovich.dto.CreateQuestionDTO;
 import ru.testovich.dto.GetQuestionDTO;
 import ru.testovich.dto.ResponseDTO;
+import ru.testovich.dto.UpdateQuestionDTO;
 import ru.testovich.services.IQuestionService;
 
 @RestController
@@ -24,5 +25,11 @@ public class QuestionController implements QuestionAPI {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(response);
     }
-    
+
+    @Override
+    public ResponseEntity<ResponseDTO<GetQuestionDTO>> updateQuestion(@Valid UpdateQuestionDTO dto) {
+        ResponseDTO<GetQuestionDTO> response = this.questionService.updateQuestion(dto);
+
+        return ResponseEntity.ok(response);
+    }
 }

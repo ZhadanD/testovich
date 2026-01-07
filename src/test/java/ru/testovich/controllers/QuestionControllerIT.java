@@ -1,6 +1,7 @@
 package ru.testovich.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.testovich.dto.CreateQuestionDTO;
+import ru.testovich.dto.UpdateQuestionDTO;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,6 +39,22 @@ public class QuestionControllerIT {
             post("/api/v1/questions")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(createQuestionDTO))
+        )
+        .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testUpdateQuestion_forbidden() throws Exception {
+        var updateQuestionDTO = new UpdateQuestionDTO(
+            1L,
+            "Вопрос",
+            List.of()
+        );
+
+        mockMvc.perform(
+            put("/api/v1/questions")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updateQuestionDTO))
         )
         .andExpect(status().isForbidden());
     }
