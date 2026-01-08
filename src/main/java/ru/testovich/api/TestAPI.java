@@ -3,6 +3,7 @@ package ru.testovich.api;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,4 +38,8 @@ public interface TestAPI {
     @Operation(summary = "Редактирование теста")
     @PutMapping
     ResponseEntity<ResponseDTO<GetTestDTO>> updateTest(@Valid @RequestBody UpdateTestDTO dto);
+
+    @Operation(summary = "Удаление теста")
+    @DeleteMapping("/{testId}")
+    ResponseEntity<Void> deleteTest(@PathVariable("testId") Long testId);
 }

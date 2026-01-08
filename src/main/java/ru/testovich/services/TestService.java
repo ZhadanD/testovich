@@ -7,15 +7,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import ru.testovich.dto.CreateTestDTO;
 import ru.testovich.dto.GetFullTestDTO;
 import ru.testovich.dto.GetTestDTO;
 import ru.testovich.dto.ResponseDTO;
 import ru.testovich.dto.UpdateTestDTO;
+import ru.testovich.entities.QuestionEntity;
 import ru.testovich.entities.TestEntity;
 import ru.testovich.entities.UserEntity;
 import ru.testovich.mappers.TestMapper;
+import ru.testovich.repositories.AnswerRepository;
+import ru.testovich.repositories.QuestionRepository;
 import ru.testovich.repositories.TestRepository;
 
 @Service
@@ -26,6 +30,10 @@ public class TestService implements ITestService {
     private TestMapper testMapper;
 
     private IUserService userService;
+
+    private AnswerRepository answerRepository;
+
+    private QuestionRepository questionRepository;
 
     @Override
     public ResponseDTO<GetTestDTO> createTest(CreateTestDTO dto) throws ResponseStatusException {
@@ -150,5 +158,54 @@ public class TestService implements ITestService {
         }
 
         return response;
+    }
+
+    @Override
+    @Transactional
+    public void deleteTest(Long testId) throws ResponseStatusException {
+        try {
+            UserEntity currentUser = this.userService.getCurrentUser();
+
+            Optional<TestEntity> optTestEntity = this.testRepository.findTestEntityByUserAndId(
+                currentUser, 
+                testId
+            );
+
+            TestEntity testEntity = optTestEntity.orElseThrow(
+                () -> new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Тест не найден"
+                )
+            );
+
+            this.deleteQuestions(testEntity);
+
+            this.testRepository.delete(testEntity);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Произошла ошибка при работе с базой данных"
+            );
+        }
+    }
+
+    @Transactional
+    private void deleteQuestions(TestEntity testEntity) throws ResponseStatusException {
+        try {
+            List<QuestionEntity> questionEntities = testEntity.getQuestions();
+
+            for(QuestionEntity questionEntity : questionEntities) {
+                this.answerRepository.removeAnswerEntityByQuestion(questionEntity);
+
+                this.questionRepository.delete(questionEntity);
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Произошла ошибка при работе с базой данных"
+            );
+        }
     }
 }

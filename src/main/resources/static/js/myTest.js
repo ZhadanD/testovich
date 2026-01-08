@@ -178,6 +178,9 @@ async function getTest() {
         case 403:
             document.location = '/auth/login'
             break
+        case 400:
+            document.location = '/myTests'
+            break
     }
 }
 
@@ -440,6 +443,34 @@ function showQuestion(question, answers) {
                             </div>
                         </div>
     `
+}
+
+async function deleteTest() {
+    let decision = confirm('Вы точно хотите удалить тест?')
+
+    if(decision) {
+        let testId = document.getElementById('testId').value
+
+        let token = localStorage.getItem('token')
+
+        let response = await fetch(`/api/v1/tests/${testId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        switch(response.status) {
+            case 204:
+                alert('Успешное удаление!')
+
+                document.location = '/myTests'
+                break
+            case 403:
+                document.location = '/auth/login'
+                break
+        }
+    }
 }
 
 async function saveTest() {

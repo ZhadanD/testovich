@@ -1,5 +1,6 @@
 package ru.testovich.controllers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -72,6 +73,14 @@ public class TestControllerIT {
             put("/api/v1/tests")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(test))
+        )
+        .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testDeleteTest_forbidden() throws Exception {
+        mockMvc.perform(
+            delete("/api/v1/tests/1")
         )
         .andExpect(status().isForbidden());
     }

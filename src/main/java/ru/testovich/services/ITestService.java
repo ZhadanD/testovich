@@ -18,4 +18,6 @@ public interface ITestService {
     ResponseDTO<GetFullTestDTO> getTestCurrentUser(Long testId) throws ResponseStatusException;
 
     ResponseDTO<GetTestDTO> updateTest(UpdateTestDTO dto) throws ResponseStatusException;
+
+    void deleteTest(Long testId) throws ResponseStatusException;
 }

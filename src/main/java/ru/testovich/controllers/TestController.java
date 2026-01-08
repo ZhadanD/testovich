@@ -49,4 +49,11 @@ public class TestController implements TestAPI {
 
         return ResponseEntity.ok(response);
     }
+
+    @Override
+    public ResponseEntity<Void> deleteTest(Long testId) {
+        this.testService.deleteTest(testId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
