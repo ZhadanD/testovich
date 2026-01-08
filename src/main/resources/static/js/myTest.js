@@ -4,10 +4,23 @@ let addedAnswers = []
 
 let listErrors = []
 
+let renderedQuestions = []
+
 function removeAnswer(answerId) {
     document.getElementById(`new-answer-${answerId}`).remove()
 
     addedAnswers = addedAnswers.filter(id => id != answerId)
+}
+
+function deleteAnswer(questionId, answerId) {
+    document.getElementById(`question-${questionId}-answer-${answerId}`).remove()
+
+    for(let question of renderedQuestions)
+        if(question.id == questionId) {
+            question.answers = question.answers.filter(answer => answer.id != answerId)
+
+            break
+        }
 }
 
 function addAnswer() {
@@ -56,6 +69,32 @@ function addAnswer() {
     `
 
     answerId++
+}
+
+function addAnswer(questionId) {
+    let newAnswer = {
+        id: answerId,
+        name: document.getElementById(`question-${questionId}-answer-name`).value,
+        isTrue: document.getElementById(`question-${questionId}-answer-isTrue`).checked,
+    }
+
+    document.getElementById(`question-${questionId}-answer-name`).value = ''
+    document.getElementById(`question-${questionId}-answer-isTrue`).checked = false
+
+    document.getElementById(`question-${questionId}-answers`).innerHTML += showAnswer(
+        { id: questionId },
+        newAnswer, 
+        answerId
+    )
+
+    answerId++
+
+    for(let question of renderedQuestions)
+        if(question.id == questionId) {
+            question.answers.push(newAnswer)
+
+            break
+        }
 }
 
 async function createQuestion() {
@@ -134,27 +173,17 @@ async function getTest() {
     }
 }
 
-async function showTest() {
-    let test = await getTest()
-
-    document.getElementById('test-name').value = test.name
-    document.getElementById('select-test-type').value = test.type
-    document.getElementById('select-test-isPublic').value = test.isPublic
-
-    for(let question of test.questions) {
-        let answers = ''
-
-        for(let answer of question.answers) {
-            answers += `
+function showAnswer(question, answer, answerId) {
+    return `
             <div
-                id="question-${question.id}-answer-${answer.id}"
+                id="question-${question.id}-answer-${answerId}"
                 class="container border border-success mb-10"
             >
                                             <input
                                                 type="text"
                                                 value="${answer.name}"
                                                 class="beautiful-input"
-                                                id="question-${question.id}-answer-${answer.id}-name"
+                                                id="question-${question.id}-answer-${answerId}-name"
                                                 placeholder="Введите название ответа"
                                             />
 
@@ -163,12 +192,12 @@ async function showTest() {
                                             <div class="checkbox-wrapper">
                                                 <input
                                                     type="checkbox"
-                                                    id="question-${question.id}-answer-${answer.id}-isTrue"
+                                                    id="question-${question.id}-answer-${answerId}-isTrue"
                                                     ${answer.isTrue ? 'checked' : ''}
                                                     class="checkbox-input"
                                                 />
                                                 <label
-                                                    for="question-${question.id}-answer-${answer.id}-isTrue"
+                                                    for="question-${question.id}-answer-${answerId}-isTrue"
                                                     class="checkbox-label"
                                                 >
                                                     <span
@@ -181,21 +210,82 @@ async function showTest() {
                                             <button
                                                 type="button"
                                                 class="btn btn-danger"
+                                                onclick="deleteAnswer(${question.id}, ${answerId})"
                                             >
                                                 Удалить
                                             </button>
                                         </div>    
-            `
-        }
+        `
+}
 
-        document.getElementById('questions').innerHTML += `
+function showAnswers(question) {
+    let answers = ''
+    
+    for(let answer of question.answers)
+        answers += showAnswer(question, answer, answer.id)
+
+    return answers
+}
+
+async function saveQuestion(questionId) {
+    let answers = []
+
+    for(let question of renderedQuestions) {
+        if(question.id == questionId) {
+            for(let answer of question.answers) {
+                answers.push(
+                    {
+                        name: document.getElementById(`question-${questionId}-answer-${answer.id}-name`).value,
+                        isTrue: document.getElementById(`question-${questionId}-answer-${answer.id}-isTrue`).checked
+                    }
+                )
+            }
+
+            break
+        }
+    }
+    
+    let question = {
+        id: questionId,
+        name: document.getElementById(`question-${questionId}-name`).value,
+        answers
+    }
+
+    let token = localStorage.getItem('token')
+
+    let response = await fetch('/api/v1/questions', {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(question)
+    })
+
+    switch(response.status) {
+        case 200:
+            document.getElementById(`btn-question-${question.id}-text`).innerText = question.name
+
+            alert('Успешное сохранение!')
+            break
+        case 403:
+            document.location = '/auth/login'
+            break
+        case 422:
+            alert('Ошибка валидации!')
+            break
+    }
+}
+
+function showQuestion(question, answers) {
+    document.getElementById('questions').innerHTML += `
             <div id="question-${question.id}">
                             <div
-                                id="btn-question-id"
+                                id="btn-question-${question.id}"
                                 class="accordion-btn"
                                 onclick="toggleAccordion('show-question-${question.id}-accordion')"
                             >
-                                <p style="font-size: 23px">${question.name}</p>
+                                <p style="font-size: 23px" id="btn-question-${question.id}-text">${question.name}</p>
                             </div>
 
                             <div
@@ -237,14 +327,14 @@ async function showTest() {
                                         type="button"
                                         class="btn btn-success mb-10"
                                         id="addAnswerBtn"
-                                        onclick="toggleAccordion('add-answer-question-id-accordion')"
+                                        onclick="toggleAccordion('add-answer-question-${question.id}-accordion')"
                                     >
                                         Добавить ответ
                                     </button>
 
                                     <div
                                         class="accordion"
-                                        id="add-answer-question-id-accordion"
+                                        id="add-answer-question-${question.id}-accordion"
                                     >
                                         <div class="accordion-content">
                                             <div class="beautiful-form">
@@ -252,13 +342,13 @@ async function showTest() {
 
                                                 <label
                                                     class="beautiful-label"
-                                                    for="answer-name"
+                                                    for="question-${question.id}-answer-name"
                                                     >Название ответа</label
                                                 >
                                                 <input
                                                     type="text"
                                                     class="beautiful-input"
-                                                    id="answer-name"
+                                                    id="question-${question.id}-answer-name"
                                                     placeholder="Введите название ответа"
                                                 />
                                                 <p
@@ -271,11 +361,11 @@ async function showTest() {
                                                 <div class="checkbox-wrapper">
                                                     <input
                                                         type="checkbox"
-                                                        id="answer-isTrue"
+                                                        id="question-${question.id}-answer-isTrue"
                                                         class="checkbox-input"
                                                     />
                                                     <label
-                                                        for="answer-isTrue"
+                                                        for="question-${question.id}-answer-isTrue"
                                                         class="checkbox-label"
                                                     >
                                                         <span
@@ -290,7 +380,7 @@ async function showTest() {
                                                 <button
                                                     type="button"
                                                     class="btn btn-success"
-                                                    onclick="addAnswer('question-id')"
+                                                    onclick="addAnswer(${question.id})"
                                                 >
                                                     Добавить ответ
                                                 </button>
@@ -306,7 +396,22 @@ async function showTest() {
                                 </div>
                             </div>
                         </div>
-        `
+    `
+}
+
+async function showTest() {
+    let test = await getTest()
+
+    document.getElementById('test-name').value = test.name
+    document.getElementById('select-test-type').value = test.type
+    document.getElementById('select-test-isPublic').value = test.isPublic
+
+    renderedQuestions = test.questions
+
+    for(let question of test.questions) {
+        let answers = showAnswers(question)
+
+        showQuestion(question, answers)
     }
 }
 
