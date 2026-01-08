@@ -1,6 +1,8 @@
 package ru.testovich.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,4 +26,8 @@ public interface QuestionAPI {
     @Operation(summary = "Редактирование вопроса с его ответами")
     @PutMapping
     ResponseEntity<ResponseDTO<GetQuestionDTO>> updateQuestion(@Valid @RequestBody UpdateQuestionDTO dto);
+
+    @Operation(summary = "Удаление вопроса с его ответами")
+    @DeleteMapping("/{questionId}")
+    ResponseEntity<Void> deleteQuestion(@PathVariable("questionId") Long questionId);
 }

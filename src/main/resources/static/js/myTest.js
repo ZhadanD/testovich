@@ -23,7 +23,7 @@ function deleteAnswer(questionId, answerId) {
         }
 }
 
-function addAnswer() {
+function addNewAnswer() {
     let newAnswer = {
         name: document.getElementById("answer-name").value,
         isTrue: document.getElementById("answer-isTrue").checked,
@@ -136,6 +136,14 @@ async function createQuestion() {
             addedAnswers = []
 
             toggleAccordion('createQuestionAccordion')
+
+            alert('Вопрос создан!')
+
+            let question = (await response.json()).data
+
+            let answers = showAnswers(question)
+
+            showQuestion(question, answers)
             break
         case 403:
             document.location = '/auth/login'
@@ -277,6 +285,32 @@ async function saveQuestion(questionId) {
     }
 }
 
+async function deleteQuestion(questionId) {
+    let decision = confirm('Вы точно хотите удалить вопрос?')
+
+    if(decision) {
+        let token = localStorage.getItem('token')
+
+        let response = await fetch(`/api/v1/questions/${questionId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        switch(response.status) {
+            case 204:
+                document.getElementById(`question-${questionId}`).remove()
+
+                alert('Успешное удаление!')
+                break
+            case 403:
+                document.location = '/auth/login'
+                break
+        }
+    }
+}
+
 function showQuestion(question, answers) {
     document.getElementById('questions').innerHTML += `
             <div id="question-${question.id}">
@@ -303,6 +337,15 @@ function showQuestion(question, answers) {
                                             onclick="saveQuestion(${question.id})"
                                         >
                                             Сохранить
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-danger mb-10"
+                                            id="delete-question-btn"
+                                            onclick="deleteQuestion(${question.id})"
+                                        >
+                                            Удалить
                                         </button>
 
                                         <label

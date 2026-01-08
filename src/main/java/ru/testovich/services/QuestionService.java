@@ -152,4 +152,45 @@ public class QuestionService implements IQuestionService {
 
         return response;
     }
+
+    @Override
+    @Transactional
+    public void deleteQuestion(Long questionId) throws ResponseStatusException {
+        try {
+            Optional<QuestionEntity> optQuestionEntity = this.questionRepository.findById(
+                questionId
+            );
+
+            QuestionEntity questionEntity = optQuestionEntity.orElseThrow(
+                () -> new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, 
+                    "Такого вопроса не существует!"
+                )
+            );
+
+            TestEntity testEntity = questionEntity.getTest();
+
+            UserEntity userEntity = this.userService.getCurrentUser();
+            
+            Optional<TestEntity> optTestEntity = this.testRepository.findTestEntityByUserAndId(userEntity, testEntity.getId());
+
+            optTestEntity.orElseThrow(
+                () -> new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, 
+                    "Такого вопроса не существует!"
+                )
+            );
+
+            this.answerRepository.removeAnswerEntityByQuestion(questionEntity);
+
+            this.questionRepository.deleteById(questionId);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR, 
+                "Ошибка при работе с базой данных!"
+            );
+        }
+    }
 }

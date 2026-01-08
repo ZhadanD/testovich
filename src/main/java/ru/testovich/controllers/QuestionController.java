@@ -32,4 +32,11 @@ public class QuestionController implements QuestionAPI {
 
         return ResponseEntity.ok(response);
     }
+
+    @Override
+    public ResponseEntity<Void> deleteQuestion(Long questionId) {
+        this.questionService.deleteQuestion(questionId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

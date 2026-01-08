@@ -11,4 +11,6 @@ public interface IQuestionService {
     ResponseDTO<GetQuestionDTO> createQuestion(CreateQuestionDTO dto) throws ResponseStatusException;
 
     ResponseDTO<GetQuestionDTO> updateQuestion(UpdateQuestionDTO dto) throws ResponseStatusException;
+
+    void deleteQuestion(Long questionId) throws ResponseStatusException;
 }
