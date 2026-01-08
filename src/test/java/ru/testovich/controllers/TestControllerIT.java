@@ -2,6 +2,7 @@ package ru.testovich.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.testovich.dto.CreateTestDTO;
+import ru.testovich.dto.UpdateTestDTO;
 import ru.testovich.enums.TypeTestEnum;
 
 @SpringBootTest
@@ -53,6 +55,23 @@ public class TestControllerIT {
     void testGetTestCurrentUser_forbidden() throws Exception {
         mockMvc.perform(
             get("/api/v1/tests/my/1")
+        )
+        .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testUpdateTest_forbidden() throws Exception {
+        var test = new UpdateTestDTO(
+            1L,
+            "Тест",
+            TypeTestEnum.FINAL_CHECK,
+            false
+        );
+
+        mockMvc.perform(
+            put("/api/v1/tests")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(test))
         )
         .andExpect(status().isForbidden());
     }

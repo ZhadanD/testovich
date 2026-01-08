@@ -12,6 +12,7 @@ import ru.testovich.dto.CreateTestDTO;
 import ru.testovich.dto.GetFullTestDTO;
 import ru.testovich.dto.GetTestDTO;
 import ru.testovich.dto.ResponseDTO;
+import ru.testovich.dto.UpdateTestDTO;
 import ru.testovich.entities.TestEntity;
 import ru.testovich.entities.UserEntity;
 import ru.testovich.mappers.TestMapper;
@@ -93,6 +94,52 @@ public class TestService implements ITestService {
             GetFullTestDTO fullTestDTO = this.testMapper.toGetFullTestDTO(testEntity);
 
             response.setData(fullTestDTO);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Произошла ошибка при работе с базой данных"
+            );
+        }
+
+        return response;
+    }
+
+    @Override
+    public ResponseDTO<GetTestDTO> updateTest(UpdateTestDTO dto) throws ResponseStatusException {
+        var response = new ResponseDTO<GetTestDTO>();
+        
+        try {
+            UserEntity currentUser = this.userService.getCurrentUser();
+
+            Optional<TestEntity> optTestEntity = this.testRepository.findTestEntityByUserAndId(
+                currentUser, 
+                dto.getId()
+            );
+
+            TestEntity testEntity = optTestEntity.orElseThrow(
+                () -> new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Тест не найден"
+                )
+            );
+
+            testEntity.setName(
+                dto.getName()
+            );
+            testEntity.setType(
+                dto.getType()
+            );
+            testEntity.setIsPublic(
+                dto.getIsPublic()
+            );
+
+            this.testRepository.save(testEntity);
+
+            GetTestDTO testDTO = this.testMapper.toGetTestDTO(testEntity);
+
+            response.setData(testDTO);
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {

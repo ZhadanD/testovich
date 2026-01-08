@@ -442,6 +442,38 @@ function showQuestion(question, answers) {
     `
 }
 
+async function saveTest() {
+    let test = {
+        id: document.getElementById('testId').value,
+        name: document.getElementById('test-name').value,
+        type: document.getElementById('select-test-type').value,
+        isPublic: document.getElementById('select-test-isPublic').value,
+    }
+
+    let token = localStorage.getItem('token')
+
+    let response = await fetch('/api/v1/tests', {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(test)
+    })
+
+    switch(response.status) {
+        case 200:
+            alert('Тест сохранен!')
+            break
+        case 403:
+            document.location = '/auth/login'
+            break
+        case 422:
+            alert('Ошибка валидации!')
+            break
+    }
+}
+
 async function showTest() {
     let test = await getTest()
 

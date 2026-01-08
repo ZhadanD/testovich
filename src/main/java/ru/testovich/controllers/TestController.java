@@ -13,6 +13,7 @@ import ru.testovich.dto.CreateTestDTO;
 import ru.testovich.dto.GetFullTestDTO;
 import ru.testovich.dto.GetTestDTO;
 import ru.testovich.dto.ResponseDTO;
+import ru.testovich.dto.UpdateTestDTO;
 import ru.testovich.services.ITestService;
 
 @RestController
@@ -38,6 +39,13 @@ public class TestController implements TestAPI {
     @Override
     public ResponseEntity<ResponseDTO<GetFullTestDTO>> getTestCurrentUser(Long testId) {
         ResponseDTO<GetFullTestDTO> response = this.testService.getTestCurrentUser(testId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<GetTestDTO>> updateTest(@Valid UpdateTestDTO dto) {
+        ResponseDTO<GetTestDTO> response = this.testService.updateTest(dto);
 
         return ResponseEntity.ok(response);
     }

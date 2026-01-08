@@ -8,6 +8,7 @@ import ru.testovich.dto.CreateTestDTO;
 import ru.testovich.dto.GetFullTestDTO;
 import ru.testovich.dto.GetTestDTO;
 import ru.testovich.dto.ResponseDTO;
+import ru.testovich.dto.UpdateTestDTO;
 
 public interface ITestService {
     ResponseDTO<GetTestDTO> createTest(CreateTestDTO dto) throws ResponseStatusException;
@@ -15,4 +16,6 @@ public interface ITestService {
     ResponseDTO<List<GetTestDTO>> getTestsCurrentUser() throws ResponseStatusException;
 
     ResponseDTO<GetFullTestDTO> getTestCurrentUser(Long testId) throws ResponseStatusException;
+
+    ResponseDTO<GetTestDTO> updateTest(UpdateTestDTO dto) throws ResponseStatusException;
 }
